@@ -79,7 +79,7 @@ If you have any questions, please feel free to reach me out at `jychen9811@gmail
 ---
 
 ### Acknowledgments
-Our project is based on [DiffSynth-Studio](https://github.com/modelscope/DiffSynth-Studio). Thanks for their awesome works.
+Our project is based on [DiffSynth-Studio](https://github.com/modelscope/DiffSynth-Studio) and [Wan 2.1](https://github.com/Wan-Video/Wan2.1). Thanks for their awesome works.
 
 
 
