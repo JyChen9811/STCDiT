@@ -1,6 +1,8 @@
 ### STCDiT: Spatio-Temporally Consistent Diffusion Transformer for High-Quality Video Super-Resolution
-> [[Project Page](https://jychen9811.github.io/STCDiT_page/)]
 > ![visitors](https://visitor-badge.laobi.icu/badge?page_id=JyChen9811/STCDiT)
+
+> [[Project Page](https://jychen9811.github.io/STCDiT_page/)] &emsp; [[Paper](https://arxiv.org/pdf/2511.18786)]
+
 
 > [Junyang Chen](https://jychen9811.github.io/), [Jiangxin Dong](https://scholar.google.com/citations?user=ruebFVEAAAAJ&hl=zh-CN&oi=ao), [Long Sun](https://sunny2109.github.io/), [Yixin Yang](https://yyang181.github.io/), [Jinshan Pan](https://jspan.github.io/),  <br>
 > [IMAG Lab](https://imag-njust.net/), Nanjing University of Science and Technology
