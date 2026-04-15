@@ -105,7 +105,7 @@ pip install -r ./requirements_for_Qwen.txt
 ```Shell
 # Step 1: Generate Captions with Qwen2.5-VL
 conda activate Qwen
-bash ./Qwen2.5-VL-main/inference.sh
+bash ./Qwen2.5-VL/inference.sh
 
 # Step 2: Run Video Super-Resolution with STCDiT
 conda activate STCDiT
