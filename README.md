@@ -1,7 +1,7 @@
 ### (CVPR 2026) STCDiT: Spatio-Temporally Consistent Diffusion Transformer for High-Quality Video Super-Resolution
 > ![visitors](https://visitor-badge.laobi.icu/badge?page_id=JyChen9811/STCDiT)
 
-> [[Project Page](https://jychen9811.github.io/STCDiT_page/)] &emsp; [[Paper](https://arxiv.org/pdf/2511.18786)]
+> [[Project Page](https://jychen9811.github.io/STCDiT_page/)] &emsp; [[Paper](https://arxiv.org/pdf/2511.18786)] &emsp; [[Supp](https://github.com/JyChen9811/STCDiT/blob/main/paper/CVPR2026_STCDiT_Supp.pdf)]
 
 
 > [Junyang Chen](https://jychen9811.github.io/), [Jiangxin Dong](https://scholar.google.com/citations?user=ruebFVEAAAAJ&hl=zh-CN&oi=ao), [Long Sun](https://sunny2109.github.io/), [Yixin Yang](https://yyang181.github.io/), [Jinshan Pan](https://jspan.github.io/),  <br>
