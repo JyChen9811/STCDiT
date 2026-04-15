@@ -25,7 +25,7 @@ class VideoDataset(Dataset):
         self.json_folder = json_folder
         nature_paths = sorted(glob(os.path.join(video_file_path, '**', '*.mp4'), recursive=True)) + sorted(glob(os.path.join(video_file_path, '**', '*.MOV'), recursive=True))
         self.filtered_list = nature_paths
-        self.video_file_path = video_file_path # 存储路径以便在 __getitem__ 中使用
+        self.video_file_path = video_file_path
 
     def __len__(self):
         return len(self.filtered_list)

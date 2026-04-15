@@ -14,6 +14,7 @@ from torch.utils.data import Dataset, DataLoader
 from torch.utils.data.distributed import DistributedSampler
 import random
 
+
 MODEL_PATH = "./model_checkpoints/Qwen-VL"
 DTYPE = torch.bfloat16
 MAX_NEW_TOKENS = 256
@@ -27,7 +28,7 @@ class ImageDataset(Dataset):
                     sorted(glob(os.path.join(img_file_path, '**', '*.png'), recursive=True))
 
         self.filtered_list = nature_paths
-        self.img_file_path = img_file_path # 存储路径以便在 __getitem__ 中使用
+        self.img_file_path = img_file_path
 
     def __len__(self):
         return len(self.filtered_list)
