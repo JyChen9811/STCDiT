@@ -12,7 +12,16 @@
 > Welcome to visit our website (专注底层视觉领域的信息服务平台) for low-level vision: [https://lowlevelcv.com/](https://lowlevelcv.com/)
 ---
 
+---  
 
+😊 You may also want to check our relevant works:
+
+1. **STCDiT (CVPR 2026)** [Paper](https://arxiv.org/abs/2511.18786) | [Code](https://github.com/JyChen9811/STCDiT)  
+   A motion-aware VAE and anchor-frame-guided DiT framework enables stable video restoration, even under complex camera motions.
+   
+2. **CODSR (CVPR2026)** [Paper](https://arxiv.org/abs/2512.14061  ) | [Code](https://github.com/Chanson94/CODSR  )  
+   A one-step diffusion SR framework enabling region-discriminative activation of generative priors and precise semantic grounding.
+   
 ### 🚩 **New Features/Updates**
 - ✅ April 15, 2026. Release [enhanced results](https://modelscope.cn/datasets/junyangchen/STCDiT_large_results) of STCDiT on VideoLQ and SportsLQ.
 - ✅ April 15, 2026. Release [SportsLQ](https://modelscope.cn/datasets/junyangchen/SportsLQ). It includes 20 sports event videos at 720p resolution.
