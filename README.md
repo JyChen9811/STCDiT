@@ -72,7 +72,6 @@
 
 ### 🚀 How to evaluate
 
----
 
 #### Environment
 ```shell
@@ -83,8 +82,8 @@ conda create -n Qwen python=3.10.19 -y
 pip install -r ./requirements_for_Qwen.txt
 
 ```
-> **Note:** If FlashAttention installation fails, download the [.whl fil](https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.2.post1/flash_attn-2.7.2.post1+cu12torch2.4cxx11abiFALSE-cp310-cp310-linux_x86_64.whl)  and install it via pip.
----
+> **Note:** If FlashAttention installation fails, download the [.whl file](https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.2.post1/flash_attn-2.7.2.post1+cu12torch2.4cxx11abiFALSE-cp310-cp310-linux_x86_64.whl)  and install it via pip.
+
 #### Download Dependent Models
 - [STCDiT and STCDiT-Tiny](https://modelscope.cn/models/junyangchen/STCDiT_ckpt)
 - [Wan2.1-i2v-14B](https://www.modelscope.cn/models/Wan-AI/Wan2.1-I2V-14B-720P)
