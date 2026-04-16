@@ -1,6 +1,6 @@
 ### NTIRE 2026 ON SHORT-FORM UGC VIDEO RESTORATION IN THE WILD WITH GENERATIVE MODELS @ CVPR2026
 
-> We directly applied the [pretrained STCDiT model](https://modelscope.cn/models/junyangchen/STCDiT_ckpt) **without any fine-tuning on the official video data**.
+> We directly applied the [pretrained STCDiT model](https://modelscope.cn/models/junyangchen/STCDiT_ckpt) **without any fine-tuning on the official training data**.
 
 > We achieved **3rd place** in the User Study track against fine-tuned methods, demonstrating strong generalization. [[Challenge Report]](https://arxiv.org/abs/2604.10551)
 
