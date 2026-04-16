@@ -4,7 +4,7 @@
 > [[Project Page](https://jychen9811.github.io/STCDiT_page/)] &emsp; [[Paper](https://arxiv.org/pdf/2511.18786)] &emsp; [[Supp](https://github.com/JyChen9811/STCDiT/blob/main/paper/CVPR2026_STCDiT_Supp.pdf)]
 
 
-> [Junyang Chen](https://jychen9811.github.io/), [Jiangxin Dong](https://scholar.google.com/citations?user=ruebFVEAAAAJ&hl=zh-CN&oi=ao), [Long Sun](https://sunny2109.github.io/), [Yixin Yang](https://yyang181.github.io/), [Jinshan Pan](https://jspan.github.io/),  <br>
+> [Junyang Chen](https://jychen9811.github.io/), [Jiangxin Dong](https://scholar.google.com/citations?user=ruebFVEAAAAJ&hl=zh-CN&oi=ao), [Long Sun](https://sunny2109.github.io/), [Yixin Yang](https://yyang181.github.io/), [Jinshan Pan](https://jspan.github.io/)  <br>
 > [IMAG Lab](https://imag-njust.net/), Nanjing University of Science and Technology
 
 > If STCDiT is helpful for you, please help star the GitHub Repo. Thanks!
@@ -22,6 +22,7 @@ Unleashing diffusion priors with feature alignment and joint VAE–LDM optimizat
    A one-step diffusion SR framework enabling region-discriminative activation of generative priors and precise semantic grounding.
 
 ### 🚩 **New Features/Updates**
+- ✅ April 16, 2026. Release STCDiT testing code for [NTIRE 2026 UGC VSR](https://arxiv.org/abs/2604.10551).
 - ✅ April 15, 2026. Release [enhanced results](https://modelscope.cn/datasets/junyangchen/STCDiT_large_results) of STCDiT on VideoLQ and SportsLQ.
 - ✅ April 15, 2026. Release [SportsLQ](https://modelscope.cn/datasets/junyangchen/SportsLQ). It includes 20 sports event videos at 720p resolution.
 - ✅ April 15, 2026. Release testing code and [pre-trained model](https://modelscope.cn/models/junyangchen/STCDiT_ckpt).
@@ -146,7 +147,6 @@ If you have any questions, please feel free to reach me out at `jychen9811@gmail
 
 ### Acknowledgments
 Our project is based on [DiffSynth-Studio](https://github.com/modelscope/DiffSynth-Studio) and [Wan 2.1](https://github.com/Wan-Video/Wan2.1). Thanks for their awesome works.
-
 
 
 
