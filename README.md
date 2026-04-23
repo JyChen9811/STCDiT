@@ -130,7 +130,7 @@ bash ./Inference/test_STCDiT_tiny.sh
 ### BibTeX
     @inproceedings{chen_STCDiT,
     title={STCDiT: Spatio-Temporally Consistent Diffusion Transformer for High-Quality Video Super-Resolution},
-    author={Chen, Junyang and Jiangxin Dong and Long Sun and Yixin Yang and Pan, Jinshan},
+    author={Chen, Junyang and Dong, Jiangxin and Sun, Long and Yang, Yixin and Pan, Jinshan},
     booktitle={CVPR},
     year={2026}
     }
