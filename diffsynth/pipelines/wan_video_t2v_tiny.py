@@ -472,6 +472,116 @@ class WanVideoPipeline_t2v_tiny(BasePipeline):
 
 
     @torch.no_grad()
+    def test(
+        self,
+        prompt_emb_posi=None,
+        prompt_emb_nega=None,
+        lq_latents=None,
+        key_frame_idx=None,
+        denoising_strength=1.0,
+        seed=None,
+        device = None,
+        rand_device="cpu",
+        height=512,
+        width=832,
+        num_frames=49,
+        cfg_scale=5.0,
+        num_inference_steps=50,
+        sigma_shift=5.0,
+        tiled=True,
+        tile_size=(30, 52),
+        tile_stride=(15, 26),
+        tea_cache_l1_thresh=None,
+        tea_cache_model_id="",
+        progress_bar_cmd=tqdm,
+        progress_bar_st=None,
+    ):
+        # Parameter check
+        height, width = self.check_resize_height_width(height, width)
+        if num_frames % 4 != 1:
+            num_frames = (num_frames + 2) // 4 * 4 + 1
+            print(f"Only `num_frames % 4 != 1` is acceptable. We round it up to {num_frames}.")
+        
+        # Tiler parameters
+        tiler_kwargs = {"tiled": tiled, "tile_size": tile_size, "tile_stride": tile_stride}
+        self.scheduler_copy = FlowMatchScheduler(shift=5, sigma_min=0.0)
+        # Scheduler
+        self.scheduler_copy.set_timesteps(num_inference_steps, denoising_strength=denoising_strength, shift=sigma_shift)
+
+        # Initialize noise
+        
+        noise = self.generate_noise((1, 16, (num_frames - 1) // 4 + 1, height//8, width//8), seed=seed, device=rand_device, dtype=torch.float32)
+        noise = noise.to(dtype=self.torch_dtype, device=device)
+        # latents = self.scheduler.add_noise(latents, noise, timestep=self.scheduler.timesteps[0])
+        # else:
+        latents = noise
+            
+        
+        # Extra input
+        extra_input = self.prepare_extra_input(latents)
+        
+        # TeaCache
+        tea_cache_posi = {"tea_cache": TeaCache(num_inference_steps, rel_l1_thresh=tea_cache_l1_thresh, model_id=tea_cache_model_id) if tea_cache_l1_thresh is not None else None}
+        tea_cache_nega = {"tea_cache": TeaCache(num_inference_steps, rel_l1_thresh=tea_cache_l1_thresh, model_id=tea_cache_model_id) if tea_cache_l1_thresh is not None else None}
+        
+        # Unified Sequence Parallel
+        usp_kwargs = self.prepare_unified_sequence_parallel()
+        image_emb = {}
+        for progress_id, timestep in enumerate(progress_bar_cmd(self.scheduler_copy.timesteps)):
+            timestep = timestep.unsqueeze(0).to(dtype=self.torch_dtype, device=device)
+            # Inference
+            noise_pred_posi = model_fn_wan_video(self.dit, latents, lq_latents, key_frame_idx=key_frame_idx, timestep=timestep, **prompt_emb_posi, **image_emb, **extra_input, **tea_cache_posi, **usp_kwargs)
+            if cfg_scale != 1.0:
+                noise_pred_nega = model_fn_wan_video(self.dit, latents, lq_latents, key_frame_idx=key_frame_idx, timestep=timestep, **prompt_emb_nega, **image_emb, **extra_input, **tea_cache_nega, **usp_kwargs)
+                noise_pred = noise_pred_nega + cfg_scale * (noise_pred_posi - noise_pred_nega)
+            else:
+                noise_pred = noise_pred_posi
+
+            # Scheduler
+            latents = self.scheduler_copy.step(noise_pred, self.scheduler_copy.timesteps[progress_id], latents)
+
+        return latents
+
+    @torch.no_grad()
+    def test_decode_seg(
+        self,
+        prompt_emb_posi=None,
+        prompt_emb_nega=None,
+        segments=None,
+        latents=None,
+        denoising_strength=1.0,
+        seed=None,
+        device = None,
+        rand_device="cpu",
+        height=480,
+        width=832,
+        num_frames=81,
+        cfg_scale=5.0,
+        num_inference_steps=50,
+        sigma_shift=5.0,
+        tiled=True,
+        tile_size=(30, 52),
+        tile_stride=(15, 26),
+        tea_cache_l1_thresh=None,
+        tea_cache_model_id="",
+        progress_bar_cmd=tqdm,
+        progress_bar_st=None,
+    ):
+        tiler_kwargs = {"tiled": tiled, "tile_size": tile_size, "tile_stride": tile_stride}
+        self.load_models_to_device(['vae'])
+        self.vae.to(device=latents.device)
+        total_frames = []
+        pre_idx = 0 
+        for frame_num in segments:
+            frames = self.decode_video(latents[:, :,pre_idx:pre_idx+frame_num, :, :], **tiler_kwargs)
+            pre_idx = pre_idx+frame_num
+            frames = self.tensor2video(frames[0])
+            total_frames += frames
+        self.load_models_to_device([])
+        return total_frames
+
+
+    @torch.no_grad()
     def test_tlc_seg(
         self,
         prompt,
@@ -715,6 +825,72 @@ class TeaCache:
         return hidden_states
 
 
+
+
+# import globals
+def model_fn_wan_video(
+    dit: WanModel_t2v_tiny,
+    x: torch.Tensor,
+    lq_input: torch.Tensor,
+    key_frame_idx: torch.Tensor,
+    timestep: torch.Tensor,
+    context: torch.Tensor,
+    clip_feature: Optional[torch.Tensor] = None,
+    y: Optional[torch.Tensor] = None,
+    tea_cache: TeaCache = None,
+    use_unified_sequence_parallel: bool = False,
+    **kwargs,
+):
+    se1 = sinusoidal_embedding_1d(dit.freq_dim, timestep).to(timestep.device)
+    # ipdb.set_trace()
+    t = dit.time_embedding(se1)
+    t_mod = dit.time_projection(t).unflatten(1, (6, dit.dim))
+    context = dit.text_embedding(context)
+    
+    
+    y = lq_input
+    b, c, f, h ,w = lq_input.shape
+    # msk = torch.ones((b, 4, f, h, w), device=lq_input.device, dtype=lq_input.dtype)
+    # y = torch.concat([msk, y],dim=1)
+    # x_input = torch.cat([x, y], dim=1)  # (b, c_x + c_y, f, h, w)
+    
+    x, (f, h, w) = dit.patchify(x)
+
+    lq_input_cues, (f, h, w) = dit.lq_patchify(lq_input)
+
+    # lq_input_cues = dit.align(torch.concat([x, lq_input_cues], dim=2), f, h, w)
+
+    x = x + lq_input_cues
+
+    key_frame_idx = [[key_frame_idx[0][0], key_frame_idx[0][3], key_frame_idx[0][-1]]]
+    print(f"key_frame_idx {key_frame_idx}")
+    key_frame_feat, retained_indices, key_frame_token_lens, key_f = dit.extract_key_frame_patch_embedding(lq_input, key_frame_idx, f, h, w)
+    # print(x.shape, f, len(retained_indices))
+    x = torch.concat([x, key_frame_feat], dim=1)
+
+    shape = (key_f, f, h, w)
+    # globals.f = f
+    # globals.h = h
+    # globals.w = w
+    freqs = torch.cat([
+        dit.freqs[0][:f+key_f].view(f+key_f, 1, 1, -1).expand(f+key_f, h, w, -1),
+        dit.freqs[1][:h].view(1, h, 1, -1).expand(f+key_f, h, w, -1),
+        dit.freqs[2][:w].view(1, 1, w, -1).expand(f+key_f, h, w, -1)
+    ], dim=-1).reshape((f+key_f) * h * w, 1, -1).to(x.device)
+    
+    for idx, block in enumerate(dit.blocks):
+        x = block(x, context, t_mod, freqs, shape, retained_indices)
+
+    x, _ = torch.split(x, [x.shape[1]-key_frame_token_lens, key_frame_token_lens], dim=1)
+
+    x = dit.head(x, t)
+
+    x = dit.unpatchify(x, (f, h, w))
+
+    return x
+
+
+    
 # import globals
 def model_fn_wan_video_tlc_test(
     dit: WanModel_t2v_tiny,

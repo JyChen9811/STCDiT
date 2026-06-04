@@ -1,4 +1,4 @@
-CUDA_VISIBLE_DEVICES=0 python /home/notebook/code/personal/S9062668/STCDiT/Inference/test_STCDiT.py \
+CUDA_VISIBLE_DEVICES=0 python ./Inference/test_STCDiT_tiny.py \
 --wan_model_path=./model_checkpoints/Wan2.1-T2V-1.3B \
 --stcdit_model_path=./model_checkpoints/STCDiT/tiny_8k.bin \
 --video_path=./Video_data/lq \

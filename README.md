@@ -22,15 +22,16 @@ Unleashing diffusion priors with feature alignment and joint VAE–LDM optimizat
    A one-step diffusion SR framework enabling region-discriminative activation of generative priors and precise semantic grounding.
 
 ### 🚩 **New Features/Updates**
-- ✅ April 16, 2026. Release STCDiT testing code for [NTIRE 2026 UGC VSR](https://arxiv.org/abs/2604.10551).
+- ✅ June 4, 2026. Released training code and added support for DDP inference.
+- ✅ April 16, 2026. STCDiT achieved 3rd place in the human subjective evaluation track of [NTIRE 2026 UGC VSR](https://arxiv.org/abs/2604.10551) **without any additional training**.
 - ✅ April 15, 2026. Release [enhanced results](https://modelscope.cn/datasets/junyangchen/STCDiT_large_results) of STCDiT on VideoLQ and SportsLQ.
 - ✅ April 15, 2026. Release [SportsLQ](https://modelscope.cn/datasets/junyangchen/SportsLQ). It includes 20 sports event videos at 720p resolution.
 - ✅ April 15, 2026. Release testing code and [pre-trained model](https://modelscope.cn/models/junyangchen/STCDiT_ckpt).
 - ✅ November 24, 2025. Create the repository.
 
 ### ⚡ **To do**
-- Release the training code. Note that STCDiT-tiny can be trained on 4×24 GB GPUs with the same training settings as in paper.
 - Release the Gradio Demo and ComfyUI Integration.
+- ~~Release the training code. Note that STCDiT-tiny can be trained on 4×24 GB GPUs with the same training settings as in paper.~~
 - ~~Release the testing code and pre-trained model. Note that STCDiT-tiny can be inferred on a single 24 GB GPU.~~
 
 
@@ -124,7 +125,33 @@ bash ./Inference/test_STCDiT_large.sh
 
 # STCDiT-Tiny with Wan2.1-T2V-1.3B base model (a single 24 GB GPU is sufficient)
 bash ./Inference/test_STCDiT_tiny.sh
+
+# For multi-GPU inference, please use the corresponding DDP inference script
+bash ./Inference_ddp/test_STCDiT_large.sh  # or bash ./Inference_ddp/test_STCDiT_tiny.sh
 ```
+
+
+---
+### ⚡ How to train
+
+
+#### Training Script
+```Shell
+# Stage 1 Preprocess videos and text into `.pth` files to reduce GPU memory consumption during training.
+bash ./dataset/data_preparation.sh
+
+# Stage 2 training
+bash ./train/train_process_i2v_large.sh # or bash ./train/train_process_t2v_tiny.sh
+
+# After Stage 2 training, enter the checkpoints folder.
+cd ./outputs/checkpoint
+python zero_to_fp32.py ./ ./STCDiT.bin --exclude_frozen_parameters
+```
+
+#### Tips for video data preparation
+- *For video data preparation, we recommend using DOVER, MUSIQ, and optical-flow-based motion magnitude to filter high-quality videos for training.*
+
+---
 
 
 ### BibTeX
