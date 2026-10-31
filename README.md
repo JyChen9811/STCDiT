@@ -5,7 +5,7 @@
 
 
 > [Junyang Chen](https://jychen9811.github.io/), [Jiangxin Dong](https://scholar.google.com/citations?user=ruebFVEAAAAJ&hl=zh-CN&oi=ao), [Long Sun](https://sunny2109.github.io/), [Yixin Yang](https://yyang181.github.io/), [Jinshan Pan](https://jspan.github.io/)  <br>
-> [IMAG Lab](https://imag-njust.net/), Nanjing University of Science and Technology
+> Nanjing University of Science and Technology
 
 > If STCDiT is helpful for you, please help star the GitHub Repo. Thanks!
 
